@@ -3,7 +3,7 @@ export default class Canvas {
 
   private canvas: HTMLCanvasElement;
 
-  private readonly ctx: CanvasRenderingContext2D | null;
+  private ctx: CanvasRenderingContext2D | null;
 
   constructor(elementID: string) {
     this.canvas = document.getElementById(elementID) as HTMLCanvasElement;
@@ -15,6 +15,7 @@ export default class Canvas {
 
   initCanvas(): void {
     this.resizeCanvas();
+    this.ctx = this.canvas.getContext('2d');
   }
 
   resizeCanvas(): void {

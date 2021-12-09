@@ -20,19 +20,21 @@ export default {
     // Coordination
     let animationID: number | null = null;
     let waitTime = 0;
-    // let startX = 0;
-    // let startY = 0;
+    let startX = 0;
+    let startY = 0;
     // let x = 0;
     // let y = 0;
-    // let w = 0;
-    // let h = 0;
+    const w = 75;
+    const h = 10;
 
     const init = () => {
-      ctx.fillStyle = '#fff';
-      ctx.beginPath();
-      ctx.fillRect(0, 0, ww, wh);
-      // startX = 0;
-      // startY = 0;
+      if (ctx) {
+        ctx.fillStyle = '#fff';
+        ctx.beginPath();
+        ctx.fillRect(0, 0, ww, wh);
+        startX = 0;
+        startY = 0;
+      }
     };
 
     const getTimeString = () => {
@@ -52,8 +54,35 @@ export default {
     const drawTime = () => {
       const timeString = getTimeString();
 
-      // Draw Time
       // console.log(timeString);
+      let fontSize = 0;
+      const type = Math.floor(Math.random() * 15);
+
+      if (type === 0) {
+        fontSize = Math.floor(Math.random() * 90) + 10;
+      } else {
+        fontSize = Math.floor(Math.random() * 10) + 1;
+      }
+
+      ctx.font = `${fontSize}px Inter`;
+      ctx.textBaseline = 'middle';
+      ctx.fillStyle = '#444';
+      ctx.fillText(timeString, startX, startY);
+
+      if (type === 0) {
+        startY += h;
+      } else {
+        startY += fontSize;
+      }
+
+      if (startY >= wh) {
+        startX += w;
+        startY = 0;
+      }
+
+      if (startX + w >= ww) {
+        init();
+      }
     };
 
     const setWait = () => {
@@ -92,12 +121,14 @@ export default {
     };
 
     window.addEventListener('resize', handleResize);
-    loop();
 
     /* Hooks */
     onMounted(() => {
       cs = new Canvas('clock');
       ctx = cs.getContext();
+      ww = cs.getWindowWidth();
+      wh = cs.getWindowHeight();
+      loop();
     });
 
     onBeforeUnmount(() => {

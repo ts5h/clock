@@ -84,7 +84,7 @@ export default {
 // Light
 .return-to-top {
   &.light {
-    background-color: rgba(white, 0.5);
+    background-color: rgba(white, 0.8);
     background-image: url(/img/arrow-back-to-home-dark.svg);
 
     a {
