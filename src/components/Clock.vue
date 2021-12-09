@@ -5,35 +5,34 @@
 </template>
 
 <script lang="ts">
-import { onBeforeUnmount } from 'vue';
+import { onMounted, onBeforeUnmount } from 'vue';
 import Canvas from '@/class/Canvas';
 
 export default {
   name: 'Clock',
   setup(): void {
-    const cs = new Canvas('clock');
-
     // Canvas
-    const ctx = cs.getContext();
+    let cs: Canvas;
+    let ctx: CanvasRenderingContext2D;
     let ww = 0;
     let wh = 0;
 
     // Coordination
     let animationID: number | null = null;
     let waitTime = 0;
-    let startX = 0;
-    let startY = 0;
-    let x = 0;
-    let y = 0;
-    let w = 0;
-    let h = 0;
+    // let startX = 0;
+    // let startY = 0;
+    // let x = 0;
+    // let y = 0;
+    // let w = 0;
+    // let h = 0;
 
     const init = () => {
       ctx.fillStyle = '#fff';
       ctx.beginPath();
       ctx.fillRect(0, 0, ww, wh);
-      startX = 0;
-      startY = 0;
+      // startX = 0;
+      // startY = 0;
     };
 
     const getTimeString = () => {
@@ -54,7 +53,7 @@ export default {
       const timeString = getTimeString();
 
       // Draw Time
-      console.log(timeString);
+      // console.log(timeString);
     };
 
     const setWait = () => {
@@ -96,6 +95,11 @@ export default {
     loop();
 
     /* Hooks */
+    onMounted(() => {
+      cs = new Canvas('clock');
+      ctx = cs.getContext();
+    });
+
     onBeforeUnmount(() => {
       window.removeEventListener('resize', handleResize);
       if (animationID) {

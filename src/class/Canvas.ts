@@ -34,7 +34,7 @@ export default class Canvas {
     return this.canvas.offsetHeight;
   }
 
-  getContext() {
+  getContext(): CanvasRenderingContext2D {
     return <CanvasRenderingContext2D> this.ctx;
   }
 }
