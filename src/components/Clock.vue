@@ -142,6 +142,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@font-face {
+  font-family: 'Inter';
+  src: local('Inter'), url('../assets/fonts/Inter-Regular.ttf') format('truetype');
+}
+
 .canvas-wrapper {
   width: 100%;
   height: 100%;
