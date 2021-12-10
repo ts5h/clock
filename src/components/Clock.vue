@@ -74,9 +74,9 @@ export default {
 
       // font size: 2px - 160px
       if (type === 0) {
-        fontSize = Math.floor(Math.random() * (isMobile().any ? 90 : 150)) + 10;
+        fontSize = Math.floor(Math.random() * (isMobile().any ? 91 : 111)) + 10;
       } else {
-        fontSize = Math.floor(Math.random() * 8) + 2;
+        fontSize = Math.floor(Math.random() * 9) + 2;
       }
 
       letterSpacing = (fontSize / 160) * -0.6;
