@@ -1,6 +1,6 @@
 // import { shallowMount } from '@vue/test-utils';
 
-describe('HelloWorld.vue', () => {
+describe('Clock.vue', () => {
   it('test', () => {
     //
   });
