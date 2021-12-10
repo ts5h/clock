@@ -1,17 +1,17 @@
 <template>
-  <ReturnToTop theme="light" />
+  <ReturnToHome theme="light" />
   <Clock />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import ReturnToTop from '@/components/ReturnToTop.vue';
+import ReturnToHome from '@/components/ReturnToHome.vue';
 import Clock from '@/components/Clock.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    ReturnToTop,
+    ReturnToHome,
     Clock,
   },
 });

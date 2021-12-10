@@ -4,9 +4,9 @@
     @mouseout="hoverHandler(false)"
     @touchstart="touchHandler(true)"
     @touchend="touchHandler(false)"
-    :class="['return-to-top', theme, status.hover ? 'on' : '']"
+    :class="['return-to-home', theme, status.hover ? 'on' : '']"
   >
-    <a href="/">Back</a>
+    <a href="/">HOME</a>
   </div>
 </template>
 
@@ -53,7 +53,7 @@ export default {
 @use "../scss/config/variables";
 
 /* Return to the HOME on static pages */
-.return-to-top {
+.return-to-home {
   position: absolute;
   left: 0;
   top: 0;
@@ -82,7 +82,7 @@ export default {
 }
 
 // Light
-.return-to-top {
+.return-to-home {
   &.light {
     background-color: rgba(white, 0.8);
     background-image: url(/img/arrow-back-to-home-dark.svg);
@@ -94,7 +94,7 @@ export default {
 }
 
 @media screen and (max-width: variables.$break-point) {
-  .return-to-top {
+  .return-to-home {
     text-indent: -9999px;
     background-position: center center;
     width: 24px;
