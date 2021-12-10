@@ -1,17 +1,20 @@
 <template>
   <ReturnToHome theme="light" />
+  <GitHub theme="light" url="https://github.com/ts5h/clock" />
   <Clock />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import ReturnToHome from '@/components/ReturnToHome.vue';
+import GitHub from '@/components/GitHub.vue';
 import Clock from '@/components/Clock.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
     ReturnToHome,
+    GitHub,
     Clock,
   },
 });
