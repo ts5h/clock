@@ -27,6 +27,12 @@ export default {
     const w = 75;
     const h = 10;
 
+    // For Sounds
+    let eventName: string;
+    let aCtx: AudioContext;
+    let oMinutes = '';
+    let nMinutes = '';
+
     const init = () => {
       if (ctx) {
         ctx.fillStyle = '#fff';
@@ -48,7 +54,6 @@ export default {
       const millSeconds = (`00${dateObj.getMilliseconds()}`).slice(-3);
 
       // console.log(hours + ':' + minutes + ':' + minutes + '.' + millSeconds);
-
       return {
         hours,
         minutes,
@@ -57,13 +62,9 @@ export default {
       };
     };
 
-    const getTimeString = () => {
-      const timeObj = getTimeObject();
-      return `${timeObj.hours}:${timeObj.minutes}:${timeObj.seconds}.${timeObj.millSeconds}`;
-    };
-
     const drawTime = () => {
-      const timeStr = getTimeString();
+      const timeObj = getTimeObject();
+      nMinutes = timeObj.minutes;
 
       // console.log(timeString);
       let fontSize = 0;
@@ -78,7 +79,15 @@ export default {
       ctx.font = `${fontSize}px Inter`;
       ctx.textBaseline = 'middle';
       ctx.fillStyle = '#444';
-      ctx.fillText(timeStr, startX, startY);
+      ctx.fillText(
+        `${timeObj.hours}:${timeObj.minutes}:${timeObj.seconds}.${timeObj.millSeconds}`,
+        startX,
+        startY,
+      );
+
+      // eslint-disable-next-line no-use-before-define
+      playClick();
+      oMinutes = nMinutes;
 
       if (type === 0) {
         startY += h;
@@ -131,14 +140,59 @@ export default {
       init();
     };
 
-    window.addEventListener('resize', handleResize);
+    // Play Click
+    const initAudioContext = () => {
+      document.removeEventListener(eventName, initAudioContext);
+      aCtx.resume();
+    };
+
+    const playClick = () => {
+      const osc = aCtx.createOscillator();
+      const gain = aCtx.createGain();
+      const comp = aCtx.createDynamicsCompressor();
+      let maxGain = 0.0;
+      let dur = 0.0;
+
+      if (oMinutes !== '' && nMinutes !== oMinutes) {
+        osc.frequency.value = 783.991;
+        maxGain = 0.6;
+        dur = 0.07;
+      } else {
+        const keyFreq = 311.1;
+        osc.frequency.value = (Math.random() * 40) - 20 + keyFreq;
+        maxGain = 0.6;
+        dur = 0.02;
+      }
+
+      osc.type = 'sine';
+      gain.gain.value = maxGain;
+
+      osc.connect(gain).connect(comp).connect(aCtx.destination);
+      osc.start(aCtx.currentTime);
+      osc.stop(aCtx.currentTime + dur);
+    };
 
     /* Hooks */
     onMounted(() => {
+      window.addEventListener('resize', handleResize);
+
+      // Canvas
       cs = new Canvas('clock');
       ctx = cs.getContext();
       ww = cs.getWindowWidth();
       wh = cs.getWindowHeight();
+
+      // Sounds
+      eventName = typeof document.ontouchend !== 'undefined' ? 'touchend' : 'mouseup';
+      document.addEventListener(eventName, initAudioContext);
+
+      try {
+        window.AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+        aCtx = new AudioContext();
+      } catch (e) {
+        console.log(e);
+      }
+
       loop();
     });
 
