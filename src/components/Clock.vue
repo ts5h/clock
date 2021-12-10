@@ -37,7 +37,7 @@ export default {
       }
     };
 
-    const getTimeString = () => {
+    const getTimeObject = () => {
       const dateObj = new Date();
       // const year = dateObj.getFullYear();
       // const month = ('0' + (dateObj.getMonth() + 1)).slice(-2);
@@ -49,10 +49,21 @@ export default {
 
       // console.log(hours + ':' + minutes + ':' + minutes + '.' + millSeconds);
 
-      return `${hours}:${minutes}:${seconds}.${millSeconds}`;
+      return {
+        hours,
+        minutes,
+        seconds,
+        millSeconds,
+      };
     };
+
+    const getTimeString = () => {
+      const timeObj = getTimeObject();
+      return `${timeObj.hours}:${timeObj.minutes}:${timeObj.seconds}.${timeObj.millSeconds}`;
+    };
+
     const drawTime = () => {
-      const timeString = getTimeString();
+      const timeStr = getTimeString();
 
       // console.log(timeString);
       let fontSize = 0;
@@ -61,13 +72,13 @@ export default {
       if (type === 0) {
         fontSize = Math.floor(Math.random() * 90) + 10;
       } else {
-        fontSize = Math.floor(Math.random() * 10) + 1;
+        fontSize = Math.floor(Math.random() * 8) + 2;
       }
 
       ctx.font = `${fontSize}px Inter`;
       ctx.textBaseline = 'middle';
       ctx.fillStyle = '#444';
-      ctx.fillText(timeString, startX, startY);
+      ctx.fillText(timeStr, startX, startY);
 
       if (type === 0) {
         startY += h;
@@ -145,6 +156,8 @@ export default {
 @font-face {
   font-family: 'Inter';
   src: local('Inter'), url('../assets/fonts/Inter-Regular.ttf') format('truetype');
+  font-variant: normal;
+  font-feature-settings: "palt" 1;
 }
 
 .canvas-wrapper {
