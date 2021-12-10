@@ -25,7 +25,7 @@ export default {
     let waitTime = 0;
     let x = 0;
     let y = 0;
-    const w = 70;
+    const w = 60;
     const h = 10;
 
     // For Sounds
@@ -37,7 +37,7 @@ export default {
     // Draw Time
     const init = () => {
       if (ctx) {
-        ctx.fillStyle = '#fff';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
         ctx.beginPath();
         ctx.fillRect(0, 0, ww, wh);
         x = 0;
@@ -79,7 +79,7 @@ export default {
         fontSize = Math.floor(Math.random() * 9) + 2;
       }
 
-      letterSpacing = (fontSize / 160) * -0.6;
+      letterSpacing = (fontSize / 120) * -0.4;
       canvas.style.letterSpacing = `${letterSpacing}em`;
 
       ctx.font = `${fontSize}px Inter`;
