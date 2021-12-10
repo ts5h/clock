@@ -156,7 +156,7 @@ export default {
       if (oMinutes !== '' && nMinutes !== oMinutes) {
         osc.frequency.value = 783.991;
         maxGain = 0.6;
-        dur = 0.07;
+        dur = 0.08;
       } else {
         const keyFreq = 311.1;
         osc.frequency.value = (Math.random() * 40) - 20 + keyFreq;
