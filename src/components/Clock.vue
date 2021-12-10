@@ -6,13 +6,16 @@
 
 <script lang="ts">
 import { onMounted, onBeforeUnmount } from 'vue';
+import isMobile from 'ismobilejs';
 import Canvas from '@/class/Canvas';
 
+// Clock component
 export default {
   name: 'Clock',
   setup(): void {
     // Canvas
     let cs: Canvas;
+    let canvas: HTMLCanvasElement;
     let ctx: CanvasRenderingContext2D;
     let ww = 0;
     let wh = 0;
@@ -20,11 +23,9 @@ export default {
     // Coordination
     let animationID: number | null = null;
     let waitTime = 0;
-    let startX = 0;
-    let startY = 0;
-    // let x = 0;
-    // let y = 0;
-    const w = 75;
+    let x = 0;
+    let y = 0;
+    const w = 70;
     const h = 10;
 
     // For Sounds
@@ -33,13 +34,14 @@ export default {
     let oMinutes = '';
     let nMinutes = '';
 
+    // Draw Time
     const init = () => {
       if (ctx) {
         ctx.fillStyle = '#fff';
         ctx.beginPath();
         ctx.fillRect(0, 0, ww, wh);
-        startX = 0;
-        startY = 0;
+        x = 0;
+        y = 0;
       }
     };
 
@@ -66,51 +68,51 @@ export default {
       const timeObj = getTimeObject();
       nMinutes = timeObj.minutes;
 
-      // console.log(timeString);
+      const type = Math.floor(Math.random() * 20);
       let fontSize = 0;
-      const type = Math.floor(Math.random() * 15);
+      let letterSpacing = 0;
 
+      // font size: 2px - 160px
       if (type === 0) {
-        fontSize = Math.floor(Math.random() * 90) + 10;
+        fontSize = Math.floor(Math.random() * (isMobile().any ? 90 : 150)) + 10;
       } else {
         fontSize = Math.floor(Math.random() * 8) + 2;
       }
 
+      letterSpacing = (fontSize / 160) * -0.6;
+      canvas.style.letterSpacing = `${letterSpacing}em`;
+
       ctx.font = `${fontSize}px Inter`;
       ctx.textBaseline = 'middle';
-      ctx.fillStyle = '#444';
-      ctx.fillText(
-        `${timeObj.hours}:${timeObj.minutes}:${timeObj.seconds}.${timeObj.millSeconds}`,
-        startX,
-        startY,
-      );
+      ctx.fillStyle = 'rgba(68, 68, 68, 0.65)';
+      ctx.fillText(`${timeObj.hours}:${timeObj.minutes}:${timeObj.seconds}.${timeObj.millSeconds}`, x, y);
 
       // eslint-disable-next-line no-use-before-define
       playClick();
       oMinutes = nMinutes;
 
       if (type === 0) {
-        startY += h;
+        y += h;
       } else {
-        startY += fontSize;
+        y += fontSize;
       }
 
-      if (startY >= wh) {
-        startX += w;
-        startY = 0;
+      if (y >= wh) {
+        x += w;
+        y = 0;
       }
 
-      if (startX + w >= ww) {
+      if (x + w >= ww) {
         init();
       }
     };
 
     const setWait = () => {
       // About 60fps
-      if (Math.floor(Math.random() * 20) > 0) {
-        waitTime = Math.floor(Math.random() * 10);
+      if (Math.floor(Math.random() * 20) === 0) {
+        waitTime = Math.floor(Math.random() * 111) + 10;
       } else {
-        waitTime = Math.floor(Math.random() * 110) + 10;
+        waitTime = Math.floor(Math.random() * 10) + 1;
       }
     };
 
@@ -132,15 +134,7 @@ export default {
       doWait();
     };
 
-    // Resize
-    const handleResize = () => {
-      cs.resizeCanvas();
-      ww = cs.getWindowWidth();
-      wh = cs.getWindowHeight();
-      init();
-    };
-
-    // Play Click
+    // Play Sounds
     const initAudioContext = () => {
       document.removeEventListener(eventName, initAudioContext);
       aCtx.resume();
@@ -156,7 +150,7 @@ export default {
       if (oMinutes !== '' && nMinutes !== oMinutes) {
         osc.frequency.value = 783.991;
         maxGain = 0.6;
-        dur = 0.08;
+        dur = 0.1;
       } else {
         const keyFreq = 311.1;
         osc.frequency.value = (Math.random() * 40) - 20 + keyFreq;
@@ -172,12 +166,21 @@ export default {
       osc.stop(aCtx.currentTime + dur);
     };
 
+    // Resize
+    const handleResize = () => {
+      cs.resizeCanvas();
+      ww = cs.getWindowWidth();
+      wh = cs.getWindowHeight();
+      init();
+    };
+
     /* Hooks */
     onMounted(() => {
       window.addEventListener('resize', handleResize);
 
       // Canvas
       cs = new Canvas('clock');
+      canvas = cs.getCanvas();
       ctx = cs.getContext();
       ww = cs.getWindowWidth();
       wh = cs.getWindowHeight();
@@ -187,6 +190,7 @@ export default {
       document.addEventListener(eventName, initAudioContext);
 
       try {
+        // eslint-disable-next-line
         window.AudioContext = window.AudioContext || (window as any).webkitAudioContext;
         aCtx = new AudioContext();
       } catch (e) {

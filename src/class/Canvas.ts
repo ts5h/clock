@@ -35,6 +35,10 @@ export default class Canvas {
     return this.canvas.offsetHeight;
   }
 
+  getCanvas(): HTMLCanvasElement {
+    return this.canvas;
+  }
+
   getContext(): CanvasRenderingContext2D {
     return <CanvasRenderingContext2D> this.ctx;
   }
