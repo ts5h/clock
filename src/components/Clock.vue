@@ -93,66 +93,84 @@ export default {
         fontSize = Math.floor(Math.random() * 9) + 2;
       }
 
-      let letterSpacing = -0.4;
-      canvas.style.letterSpacing = `${letterSpacing}em`;
-      ctx.font = `${fontSize}px Inter`;
-      ctx.textBaseline = 'middle';
-      ctx.fillStyle = 'rgba(68, 68, 68, 0.75)';
+      let letterSpacing: number;
 
-      if (isMobile().any) {
+      if (isMobile().apple.device) {
+        letterSpacing = 0;
+      } else if (isMobile().any) {
+        letterSpacing = (fontSize / 80) * -0.15;
+      } else {
+        letterSpacing = (fontSize / 120) * -0.4;
+      }
+
+      if (isMobile().apple.device) {
+        canvas.style.letterSpacing = '0em';
+        ctx.font = `${fontSize}px Inter`;
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'rgba(68, 68, 68, 0.75)';
+
+        // fillText
         const ratio = fontSize / 100;
-        letterSpacing = (fontSize / 80) * -8;
-
+        const space = (fontSize / 80) * -6;
         let localX = x;
+
         for (let i = 0; i < timeString.length; i += 1) {
           ctx.fillText(timeString[i], localX, y);
 
           switch (timeString[i]) {
             case '0':
-              localX += (textSize.zero.width + letterSpacing) * ratio;
+              localX += (textSize.zero.width + space) * ratio;
               break;
             case '1':
-              localX += (textSize.one.width + letterSpacing) * ratio;
+              localX += (textSize.one.width + space) * ratio;
               break;
             case '2':
-              localX += (textSize.two.width + letterSpacing) * ratio;
+              localX += (textSize.two.width + space) * ratio;
               break;
             case '3':
-              localX += (textSize.three.width + letterSpacing) * ratio;
+              localX += (textSize.three.width + space) * ratio;
               break;
             case '4':
-              localX += (textSize.four.width + letterSpacing) * ratio;
+              localX += (textSize.four.width + space) * ratio;
               break;
             case '5':
-              localX += (textSize.five.width + letterSpacing) * ratio;
+              localX += (textSize.five.width + space) * ratio;
               break;
             case '6':
-              localX += (textSize.six.width + letterSpacing) * ratio;
+              localX += (textSize.six.width + space) * ratio;
               break;
             case '7':
               if (i < timeString.length - 1 && timeString[i + 1] === '.') {
-                localX += (textSize.seven.width - 10 + letterSpacing) * ratio;
+                localX += (textSize.seven.width - 10 + space) * ratio;
               } else {
-                localX += (textSize.seven.width + letterSpacing) * ratio;
+                localX += (textSize.seven.width + space) * ratio;
               }
               break;
             case '8':
-              localX += (textSize.eight.width + letterSpacing) * ratio;
+              localX += (textSize.eight.width + space) * ratio;
               break;
             case '9':
-              localX += (textSize.nine.width + letterSpacing) * ratio;
+              localX += (textSize.nine.width + space) * ratio;
               break;
             case ':':
-              localX += (textSize.colon.width + letterSpacing) * ratio;
+              localX += (textSize.colon.width + space) * ratio;
               break;
             case '.':
-              localX += (textSize.dot.width + letterSpacing) * ratio;
+              if (i < timeString.length - 1 && timeString[i + 1] === '1') {
+                localX += (textSize.dot.width - 10 + space) * ratio;
+              } else {
+                localX += (textSize.dot.width + space) * ratio;
+              }
               break;
             default:
               break;
           }
         }
       } else {
+        canvas.style.letterSpacing = `${letterSpacing}em`;
+        ctx.font = `${fontSize}px Inter`;
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'rgba(68, 68, 68, 0.75)';
         ctx.fillText(timeString, x, y);
       }
 
@@ -307,7 +325,6 @@ export default {
   height: 100%;
 
   canvas {
-    font-weight: 400;
     -webkit-font-smoothing: subpixel-antialiased;
     text-rendering: optimizeLegibility;
     vertical-align: bottom;
