@@ -84,7 +84,7 @@ export default {
 
       ctx.font = `${fontSize}px Inter`;
       ctx.textBaseline = 'middle';
-      ctx.fillStyle = 'rgba(68, 68, 68, 0.65)';
+      ctx.fillStyle = 'rgba(68, 68, 68, 0.75)';
       ctx.fillText(`${timeObj.hours}:${timeObj.minutes}:${timeObj.seconds}.${timeObj.millSeconds}`, x, y);
 
       // eslint-disable-next-line no-use-before-define
