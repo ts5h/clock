@@ -27,6 +27,20 @@ export default {
     let y = 0;
     const w = 60;
     const h = 10;
+    const textSize = {
+      zero: { width: 0 },
+      one: { width: 0 },
+      two: { width: 0 },
+      three: { width: 0 },
+      four: { width: 0 },
+      five: { width: 0 },
+      six: { width: 0 },
+      seven: { width: 0 },
+      eight: { width: 0 },
+      nine: { width: 0 },
+      colon: { width: 0 },
+      dot: { width: 0 },
+    };
 
     // For Sounds
     let eventName: string;
@@ -66,26 +80,81 @@ export default {
 
     const drawTime = () => {
       const timeObj = getTimeObject();
+      const timeString = `${timeObj.hours}:${timeObj.minutes}:${timeObj.seconds}.${timeObj.millSeconds}`;
       nMinutes = timeObj.minutes;
 
-      const type = Math.floor(Math.random() * 20);
+      const type = Math.floor(Math.random() * (isMobile().any ? 12 : 20));
       let fontSize = 0;
-      let letterSpacing = 0;
 
-      // font size: 2px - 160px
+      // font size: 2px - 80px / 2px - 120px
       if (type === 0) {
-        fontSize = Math.floor(Math.random() * (isMobile().any ? 91 : 111)) + 10;
+        fontSize = Math.floor(Math.random() * (isMobile().any ? 81 : 111)) + 10;
       } else {
         fontSize = Math.floor(Math.random() * 9) + 2;
       }
 
-      letterSpacing = (fontSize / 120) * -0.4;
+      let letterSpacing = -0.4;
       canvas.style.letterSpacing = `${letterSpacing}em`;
-
       ctx.font = `${fontSize}px Inter`;
       ctx.textBaseline = 'middle';
       ctx.fillStyle = 'rgba(68, 68, 68, 0.75)';
-      ctx.fillText(`${timeObj.hours}:${timeObj.minutes}:${timeObj.seconds}.${timeObj.millSeconds}`, x, y);
+
+      if (isMobile().any) {
+        const ratio = fontSize / 100;
+        letterSpacing = (fontSize / 80) * -8;
+
+        let localX = x;
+        for (let i = 0; i < timeString.length; i += 1) {
+          ctx.fillText(timeString[i], localX, y);
+
+          switch (timeString[i]) {
+            case '0':
+              localX += (textSize.zero.width + letterSpacing) * ratio;
+              break;
+            case '1':
+              localX += (textSize.one.width + letterSpacing) * ratio;
+              break;
+            case '2':
+              localX += (textSize.two.width + letterSpacing) * ratio;
+              break;
+            case '3':
+              localX += (textSize.three.width + letterSpacing) * ratio;
+              break;
+            case '4':
+              localX += (textSize.four.width + letterSpacing) * ratio;
+              break;
+            case '5':
+              localX += (textSize.five.width + letterSpacing) * ratio;
+              break;
+            case '6':
+              localX += (textSize.six.width + letterSpacing) * ratio;
+              break;
+            case '7':
+              if (i < timeString.length - 1 && timeString[i + 1] === '.') {
+                localX += (textSize.seven.width - 10 + letterSpacing) * ratio;
+              } else {
+                localX += (textSize.seven.width + letterSpacing) * ratio;
+              }
+              break;
+            case '8':
+              localX += (textSize.eight.width + letterSpacing) * ratio;
+              break;
+            case '9':
+              localX += (textSize.nine.width + letterSpacing) * ratio;
+              break;
+            case ':':
+              localX += (textSize.colon.width + letterSpacing) * ratio;
+              break;
+            case '.':
+              localX += (textSize.dot.width + letterSpacing) * ratio;
+              break;
+            default:
+              break;
+          }
+        }
+      } else {
+        ctx.fillText(timeString, x, y);
+      }
 
       // eslint-disable-next-line no-use-before-define
       playClick();
@@ -185,6 +254,21 @@ export default {
       ww = cs.getWindowWidth();
       wh = cs.getWindowHeight();
 
+      // Check text size
+      ctx.font = '100px Inter';
+      textSize.zero.width = ctx.measureText('0').width;
+      textSize.one.width = ctx.measureText('1').width;
+      textSize.two.width = ctx.measureText('2').width;
+      textSize.three.width = ctx.measureText('3').width;
+      textSize.four.width = ctx.measureText('4').width;
+      textSize.five.width = ctx.measureText('5').width;
+      textSize.six.width = ctx.measureText('6').width;
+      textSize.seven.width = ctx.measureText('7').width;
+      textSize.eight.width = ctx.measureText('8').width;
+      textSize.nine.width = ctx.measureText('9').width;
+      textSize.colon.width = ctx.measureText(':').width;
+      textSize.dot.width = ctx.measureText('.').width;
+
       // Sounds
       eventName = typeof document.ontouchend !== 'undefined' ? 'touchend' : 'mouseup';
       document.addEventListener(eventName, initAudioContext);
@@ -223,6 +307,9 @@ export default {
   height: 100%;
 
   canvas {
+    font-weight: 400;
+    -webkit-font-smoothing: subpixel-antialiased;
+    text-rendering: optimizeLegibility;
     vertical-align: bottom;
   }
 }
