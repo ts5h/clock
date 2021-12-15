@@ -1,5 +1,5 @@
 # Clock - 2021
-Experimental graphic work using Vue3 + TypeScript  
+Experimental graphic work using Vue3 + TypeScript + eslint + prettier   
 https://0bjekt.co/2021/clock/
 
 ![clock](https://user-images.githubusercontent.com/1344010/145604476-eaf82045-55bf-4e9d-8a7b-b112f2e11a81.jpg)
